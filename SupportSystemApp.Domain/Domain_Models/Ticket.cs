@@ -22,7 +22,7 @@ namespace SupportSystemApp.Domain.Domain
         public DateTime? ResolvedAt { get; set; }
 
         [Required(ErrorMessage ="Please choose requester!")]
-        public string? RequesterId { get; set; }
+        public string RequesterId { get; set; }
         public virtual SupportSystemAppUser? OpenedBy { get; set; }
 
         public string? TechnitianId { get; set; }

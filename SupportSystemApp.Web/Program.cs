@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using SupportSystemApp.Domain.Identity;
 using SupportSystemApp.Repository;
+using SupportSystemApp.Repository.Seed;
 using SupportSystemApp.Service.Implementation;
 using SupportSystemApp.Service.Interface;
 
@@ -15,9 +16,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<SupportSystemAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+//IDENTITY
+builder.Services
+    .AddDefaultIdentity<SupportSystemAppUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
@@ -33,6 +42,13 @@ builder.Services.AddTransient<IAttachmentService, AttachmentService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    //await SeedData.SeedRoles(services);
+    await SeedData.SeedAdmin(services);
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

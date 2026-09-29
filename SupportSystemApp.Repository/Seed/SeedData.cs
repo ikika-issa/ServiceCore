@@ -32,7 +32,7 @@ namespace SupportSystemApp.Repository.Seed
             var userManager =
                 serviceProvider.GetRequiredService<UserManager<SupportSystemAppUser>>();
 
-            var adminEmail = "admin@pocketcart.com";
+            var adminEmail = "global.admin@servicecore.com";
 
             var admin = await userManager.FindByEmailAsync(adminEmail);
 
@@ -43,14 +43,25 @@ namespace SupportSystemApp.Repository.Seed
                     UserName = adminEmail,
                     Email = adminEmail,
                     FirstName = "Main",
-                    LastName = "Admin"
+                    LastName = "Admin",
+                    EmailConfirmed = true
                 };
 
-                await userManager.CreateAsync(newAdmin, "Admin123!");
+                var result = await userManager.CreateAsync(newAdmin, "Admin123!");
 
-                await userManager.AddToRoleAsync(newAdmin, "Global_Admin");
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join(", ",
+                        result.Errors.Select(x => x.Description)));
+                }
+                //await userManager.AddToRoleAsync(newAdmin, "Global_Admin");
 
             }
+            else if (!admin.EmailConfirmed)
+            {
+                admin.EmailConfirmed = true;
+                await userManager.UpdateAsync(admin);
+            }   
         }
     }
 }
