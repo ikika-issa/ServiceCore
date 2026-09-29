@@ -12,7 +12,7 @@ using SupportSystemApp.Repository;
 namespace SupportSystemApp.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260605133242_m1")]
+    [Migration("20260929095646_m1")]
     partial class m1
     {
         /// <inheritdoc />
@@ -218,6 +218,7 @@ namespace SupportSystemApp.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -232,6 +233,7 @@ namespace SupportSystemApp.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SubcategoryId")
@@ -409,12 +411,14 @@ namespace SupportSystemApp.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Header")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("RequesterId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ResolvedAt")
@@ -791,7 +795,8 @@ namespace SupportSystemApp.Repository.Migrations
                     b.HasOne("SupportSystemApp.Domain.Identity.SupportSystemAppUser", "OpenedBy")
                         .WithMany("OpenedTickets")
                         .HasForeignKey("RequesterId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("SupportSystemApp.Domain.Domain.Site", "Site")
                         .WithMany()

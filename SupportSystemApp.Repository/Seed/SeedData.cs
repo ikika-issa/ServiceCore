@@ -48,7 +48,7 @@ namespace SupportSystemApp.Repository.Seed
 
                 await userManager.CreateAsync(newAdmin, "Admin123!");
 
-                await userManager.AddToRoleAsync(newAdmin, "Admin");
+                await userManager.AddToRoleAsync(newAdmin, "Global_Admin");
 
             }
         }
