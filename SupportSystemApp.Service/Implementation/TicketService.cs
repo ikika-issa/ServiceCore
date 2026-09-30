@@ -37,29 +37,65 @@ namespace SupportSystemApp.Service.Implementation
             return _ticketRepository.GetAll(selector: x => x, 
                 include: x => x
                 .Include(t => t.TicketNumber)!
-                .Include(t => t.OpenedBy)
+                .Include(t => t.OpenedBy)!
                 .Include(t => t.AssignedTo)
                 .Include(t => t.Site)
                 .Include(t => t.SupportGroup)
-                .Include(t => t.TicketNumber)
+                .Include(t => t.TicketNumber)!
                 .Include(t => t.Details)
-                .Include(t => t.Status)
+                .Include(t => t.Status)!
                 .Include(t => t.Header)!
+                .Include(t => t.Notes)
+                .Include(t => t.TicketTasks)
                 ).ToList();
         }
 
         public Ticket GetById(Guid id)
         {
-            return _ticketRepository.Get(selector: x => x, predicate: x => x.Id == id, 
-                include: x => x.Include(t => t.AssignedTo)!.Include(t => t.OpenedBy)!.
-                Include(t => t.Site).Include(t => t.SupportGroup)!)!;
+            return _ticketRepository.Get(selector: x => x, predicate: x => x.Id == id,
+                include: x => x
+                .Include(t => t.TicketNumber)!
+                .Include(t => t.OpenedBy)!
+                .Include(t => t.AssignedTo)
+                .Include(t => t.Site)
+                .Include(t => t.SupportGroup)
+                .Include(t => t.TicketNumber)!
+                .Include(t => t.Details)
+                .Include(t => t.Status)!
+                .Include(t => t.Header)!
+                .Include(t => t.Notes)
+                .Include(t => t.TicketTasks));
         }
 
         public Ticket Insert(Ticket ticket)
         {
             ticket.Id = Guid.NewGuid();
+            ticket.TicketNumber = GenerateTicketNumber();
             ticket.CreatedAt = DateTime.UtcNow; //CHECK LATER
             return _ticketRepository.Insert(ticket);
+        }
+
+        public string GenerateTicketNumber()
+        {
+            var lastTicket = _ticketRepository
+                .GetAll(selector: x => x)
+                .OrderByDescending(x => x.CreatedAt)
+                .FirstOrDefault();
+
+            int nextNumber = 1;
+
+            if (lastTicket != null && !string.IsNullOrEmpty(lastTicket.TicketNumber))
+            {
+                // Ako brojot e primer "TKT-000123"
+                string numericPart = lastTicket.TicketNumber.Replace("TKT-", "");
+
+                if (int.TryParse(numericPart, out int lastNumber))
+                {
+                    nextNumber = lastNumber + 1;
+                }
+            }
+
+            return $"TKT-{nextNumber:D6}";
         }
 
         public Ticket Update(Ticket ticket)
