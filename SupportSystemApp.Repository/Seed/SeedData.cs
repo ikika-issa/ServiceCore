@@ -11,22 +11,63 @@ namespace SupportSystemApp.Repository.Seed
 {
     public class SeedData
     {
-        //    public static async Task SeedRoles(IServiceProvider serviceProvider)
-        //    {
-        //        var roleManager =
-        //            serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        public static async Task SeedSites()
+        {
+             
+        }
 
-        //        if (!await roleManager.RoleExistsAsync("Admin"))
-        //        {
-        //            await roleManager.CreateAsync(new IdentityRole("Admin"));
-        //        }
+        public static async Task SeedSupportGroups()
+        {
 
-        //        if (!await roleManager.RoleExistsAsync("Cashier"))
-        //        {
-        //            await roleManager.CreateAsync(new IdentityRole("Cashier"));
-        //        }
-        //    }
+        }
 
+        public static async Task SeedRoles(IServiceProvider serviceProvider)
+        {
+            
+        }
+
+        public static async Task SeedTicketType(IServiceProvider serviceProvider)
+        {
+
+        }
+
+        public static async Task SeedTicketStatus (IServiceProvider serviceProvider)
+        {
+            
+        }
+
+        public static async Task SeedTicketPriority(IServiceProvider serviceProvider)
+        {
+
+        }
+
+        public static async Task SeedTicketMode (IServiceProvider serviceProvider)
+        {
+
+        }
+
+        public static async Task SeedSystemsCAB(IServiceProvider serviceProvider)
+        {
+
+        }
+
+        public static async Task SeedTicketImpact(IServiceProvider serviceProvider)
+        {
+
+        }
+
+
+        public static async Task SeedTicketUrgency(IServiceProvider serviceProvider)
+        {
+
+        }
+
+        public static async Task SeedServiceCategory(IServiceProvider serviceProvider)
+        {
+
+        }
+
+        
         public static async Task SeedAdmin(IServiceProvider serviceProvider)
         {
             var userManager =

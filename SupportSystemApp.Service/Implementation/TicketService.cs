@@ -36,15 +36,10 @@ namespace SupportSystemApp.Service.Implementation
         {
             return _ticketRepository.GetAll(selector: x => x, 
                 include: x => x
-                .Include(t => t.TicketNumber)!
-                .Include(t => t.OpenedBy)!
+                .Include(t => t.OpenedBy)
                 .Include(t => t.AssignedTo)
                 .Include(t => t.Site)
                 .Include(t => t.SupportGroup)
-                .Include(t => t.TicketNumber)!
-                .Include(t => t.Details)
-                .Include(t => t.Status)!
-                .Include(t => t.Header)!
                 .Include(t => t.Notes)
                 .Include(t => t.TicketTasks)
                 ).ToList();
@@ -54,15 +49,10 @@ namespace SupportSystemApp.Service.Implementation
         {
             return _ticketRepository.Get(selector: x => x, predicate: x => x.Id == id,
                 include: x => x
-                .Include(t => t.TicketNumber)!
-                .Include(t => t.OpenedBy)!
+                .Include(t => t.OpenedBy)
                 .Include(t => t.AssignedTo)
                 .Include(t => t.Site)
                 .Include(t => t.SupportGroup)
-                .Include(t => t.TicketNumber)!
-                .Include(t => t.Details)
-                .Include(t => t.Status)!
-                .Include(t => t.Header)!
                 .Include(t => t.Notes)
                 .Include(t => t.TicketTasks));
         }

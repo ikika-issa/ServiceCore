@@ -8,63 +8,61 @@
 
 <div class="card shadow-sm">
     <div class="card-header bg-dark text-white">
-        <h4 class="mb-0">Tickets</h4>
+        <h4 class="mb-0">Requests   <a asp-action="Create">+New</a></h4>
     </div>
     <div class="card-body">
         <table class="table table-bordered table-hover table-striped align-middle">
             <thead>
                 <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.TicketNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Header)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Details)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Priority)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.CreatedAt)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.DueBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ResolvedAt)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.OpenedBy)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AssignedTo)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Site)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.SupportGroup)
-                    </th>
                     <th></th>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        SUBJECT
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+                    <th>
+                        PRIORITY
+                    </th>
+                    <th>
+                        CREATED DATE
+                    </th>
+                    <th>
+                        DUE BY
+                    </th>
+                    <th>
+                        RESOLVED AT
+                    </th>
+                    <th>
+                        REQUESTER
+                    </th>
+                    <th>
+                        ASSIGNED TO
+                    </th>
+                    <th>
+                        SITE
+                    </th>
+                    <th>
+                        GROUP
+                    </th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
                         <td>
+
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.TicketNumber)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Header)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Details)
                         </td>
                         <td>
                             @switch (item.Status)
@@ -85,19 +83,15 @@
                             @switch (item.Priority)
                             {
                                 case TicketPriority.Low:
-                                    <span class="badge bg-success">Low</span>
+                                    <span class="badge bg-success">3</span>
                                     break;
 
                                 case TicketPriority.Medium:
-                                    <span class="badge bg-warning text-dark">Medium</span>
+                                    <span class="badge bg-warning text-dark">2</span>
                                     break;
 
                                 case TicketPriority.High:
-                                    <span class="badge bg-danger">High</span>
-                                    break;
-
-                                case TicketPriority.Urgent:
-                                    <span class="badge bg-dark">Critical</span>
+                                    <span class="badge bg-danger">1</span>
                                     break;
                             }
                         </td>
@@ -122,29 +116,9 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.SupportGroup!.Id)
                         </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id"
-                               class="btn btn-sm btn-primary">
-                                View
-                            </a>
-
-                            <a asp-action="Edit" asp-route-id="@item.Id"
-                               class="btn btn-sm btn-warning">
-                                Edit
-                            </a>
-
-                            <a asp-action="Delete" asp-route-id="@item.Id"
-                               class="btn btn-sm btn-danger">
-                                Delete
-                            </a>
-                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
