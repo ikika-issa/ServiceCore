@@ -6,21 +6,8 @@ using System.Threading.Tasks;
 
 namespace SupportSystemApp.Domain.Domain
 {
-    public enum TicketStatus
+    public class TicketStatus : BaseEntity
     {
-        Open,
-        InProgress,
-        PendingInvestigation,
-        PendingPartner,
-        PendingResponse,
-        PendingReturn,
-        PendingDelivery,
-        PendingApproval,
-        OnHold,
-        Monitoring,
-        Assigned,
-        Cancelled,
-        Closed,
-        StartersLeavers
+        public string Name { get; set; }
     }
 }

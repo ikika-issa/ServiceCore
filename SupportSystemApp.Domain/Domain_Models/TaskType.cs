@@ -6,16 +6,8 @@ using System.Threading.Tasks;
 
 namespace SupportSystemApp.Domain.Domain
 {
-    public enum TaskType
+    public class TaskType : BaseEntity
     {
-        Implementation,
-        Install_Uninstall,
-        Maintenance,
-        Planning,
-        Release,
-        Replacement_Repair,
-        SystemAccess,
-        Testing,
-        Troubleshooting
+        public string Name { get; set; }
     }
 }

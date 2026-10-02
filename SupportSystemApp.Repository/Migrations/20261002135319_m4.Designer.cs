@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupportSystemApp.Repository;
 
@@ -11,9 +12,11 @@ using SupportSystemApp.Repository;
 namespace SupportSystemApp.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261002135319_m4")]
+    partial class m4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -426,7 +429,7 @@ namespace SupportSystemApp.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ImpactId")
+                    b.Property<Guid?>("PriorityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RequesterId")
@@ -436,10 +439,10 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<DateTime?>("ResolvedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ServiceCategoryId")
+                    b.Property<Guid?>("SiteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SiteId")
+                    b.Property<Guid?>("StatusId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SupportGroupId")
@@ -448,47 +451,22 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<string>("TechnitianId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("TicketModeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("TicketNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TicketPriorityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TicketStatusId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("TicketTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UrgencyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ImpactId");
+                    b.HasIndex("PriorityId");
 
                     b.HasIndex("RequesterId");
 
-                    b.HasIndex("ServiceCategoryId");
-
                     b.HasIndex("SiteId");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("SupportGroupId");
 
                     b.HasIndex("TechnitianId");
-
-                    b.HasIndex("TicketModeId");
-
-                    b.HasIndex("TicketPriorityId");
-
-                    b.HasIndex("TicketStatusId");
-
-                    b.HasIndex("TicketTypeId");
-
-                    b.HasIndex("UrgencyId");
 
                     b.ToTable("Tickets");
                 });
@@ -611,21 +589,6 @@ namespace SupportSystemApp.Repository.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("TicketTasks");
-                });
-
-            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Impact", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Impacts");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Permission", b =>
@@ -959,9 +922,9 @@ namespace SupportSystemApp.Repository.Migrations
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.Ticket", b =>
                 {
-                    b.HasOne("SupportSystemApp.Domain.Domain_Models.Impact", "Impact")
+                    b.HasOne("SupportSystemApp.Domain.Domain.TicketPriority", "Priority")
                         .WithMany()
-                        .HasForeignKey("ImpactId");
+                        .HasForeignKey("PriorityId");
 
                     b.HasOne("SupportSystemApp.Domain.Identity.SupportSystemAppUser", "OpenedBy")
                         .WithMany("OpenedTickets")
@@ -969,13 +932,13 @@ namespace SupportSystemApp.Repository.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SupportSystemApp.Domain.Domain_Models.Service_Category", "ServiceCategory")
-                        .WithMany()
-                        .HasForeignKey("ServiceCategoryId");
-
                     b.HasOne("SupportSystemApp.Domain.Domain.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId");
+
+                    b.HasOne("SupportSystemApp.Domain.Domain.TicketStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
 
                     b.HasOne("SupportSystemApp.Domain.Domain.SupportGroup", "SupportGroup")
                         .WithMany()
@@ -986,47 +949,17 @@ namespace SupportSystemApp.Repository.Migrations
                         .HasForeignKey("TechnitianId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("SupportSystemApp.Domain.Domain_Models.TicketMode", "TicketMode")
-                        .WithMany()
-                        .HasForeignKey("TicketModeId");
-
-                    b.HasOne("SupportSystemApp.Domain.Domain.TicketPriority", "Priority")
-                        .WithMany()
-                        .HasForeignKey("TicketPriorityId");
-
-                    b.HasOne("SupportSystemApp.Domain.Domain.TicketStatus", "Status")
-                        .WithMany()
-                        .HasForeignKey("TicketStatusId");
-
-                    b.HasOne("SupportSystemApp.Domain.Domain_Models.TicketType", "TicketType")
-                        .WithMany()
-                        .HasForeignKey("TicketTypeId");
-
-                    b.HasOne("SupportSystemApp.Domain.Domain_Models.Urgency", "Urgency")
-                        .WithMany()
-                        .HasForeignKey("UrgencyId");
-
                     b.Navigation("AssignedTo");
-
-                    b.Navigation("Impact");
 
                     b.Navigation("OpenedBy");
 
                     b.Navigation("Priority");
-
-                    b.Navigation("ServiceCategory");
 
                     b.Navigation("Site");
 
                     b.Navigation("Status");
 
                     b.Navigation("SupportGroup");
-
-                    b.Navigation("TicketMode");
-
-                    b.Navigation("TicketType");
-
-                    b.Navigation("Urgency");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketShare", b =>

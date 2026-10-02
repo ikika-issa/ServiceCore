@@ -45,4 +45,13 @@ public class ApplicationDbContext : IdentityDbContext<SupportSystemAppUser>
     public virtual DbSet<TaskInTicket> TaskInTickets { get; set; }
     public virtual DbSet<Permission> Permissions { get; set; }
     public virtual DbSet<RolePermission> RolePermissions { get; set; }
+    public virtual DbSet<TicketPriority> TicketPriorities { get; set; }
+    public virtual DbSet<TicketStatus> TicketStatuses { get; set; }
+    public virtual DbSet<TaskType> TaskTypes { get; set; }
+    public virtual DbSet<Service_Category> ServiceCategories { get; set; }
+    public virtual DbSet<TicketMode> TicketModes { get; set; }
+    public virtual DbSet<TicketType> TicketTypes { get; set; }
+    public virtual DbSet<SystemsCAB> SystemsCABs { get; set; }
+    public virtual DbSet<Urgency> Urgencies { get; set; }
+    public virtual DbSet<Impact> Impacts { get; set; }
 }

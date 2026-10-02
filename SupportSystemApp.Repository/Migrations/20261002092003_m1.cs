@@ -89,6 +89,42 @@ namespace SupportSystemApp.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TaskTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TicketPriorities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TicketPriorities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TicketStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TicketStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -298,8 +334,8 @@ namespace SupportSystemApp.Repository.Migrations
                     TicketNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Header = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Details = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: true),
+                    StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PriorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DueBy = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ResolvedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -332,6 +368,16 @@ namespace SupportSystemApp.Repository.Migrations
                         name: "FK_Tickets_SupportGroups_SupportGroupId",
                         column: x => x.SupportGroupId,
                         principalTable: "SupportGroups",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tickets_TicketPriorities_PriorityId",
+                        column: x => x.PriorityId,
+                        principalTable: "TicketPriorities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Tickets_TicketStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "TicketStatuses",
                         principalColumn: "Id");
                 });
 
@@ -418,14 +464,14 @@ namespace SupportSystemApp.Repository.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: true),
+                    StatusId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupportGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: true),
+                    PriorityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ScheduleStart = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ScheduleEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SupportSystemAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TaskType = table.Column<int>(type: "int", nullable: true),
+                    TaskTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ActualStart = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ActualEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TaskReminderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -448,6 +494,21 @@ namespace SupportSystemApp.Repository.Migrations
                         name: "FK_TicketTasks_TaskReminders_TaskReminderId",
                         column: x => x.TaskReminderId,
                         principalTable: "TaskReminders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketTasks_TaskTypes_TaskTypeId",
+                        column: x => x.TaskTypeId,
+                        principalTable: "TaskTypes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketTasks_TicketPriorities_PriorityId",
+                        column: x => x.PriorityId,
+                        principalTable: "TicketPriorities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketTasks_TicketStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "TicketStatuses",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_TicketTasks_Tickets_TicketId",
@@ -632,6 +693,11 @@ namespace SupportSystemApp.Repository.Migrations
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tickets_PriorityId",
+                table: "Tickets",
+                column: "PriorityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_RequesterId",
                 table: "Tickets",
                 column: "RequesterId");
@@ -640,6 +706,11 @@ namespace SupportSystemApp.Repository.Migrations
                 name: "IX_Tickets_SiteId",
                 table: "Tickets",
                 column: "SiteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_StatusId",
+                table: "Tickets",
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_SupportGroupId",
@@ -667,6 +738,16 @@ namespace SupportSystemApp.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TicketTasks_PriorityId",
+                table: "TicketTasks",
+                column: "PriorityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketTasks_StatusId",
+                table: "TicketTasks",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TicketTasks_SupportGroupId",
                 table: "TicketTasks",
                 column: "SupportGroupId");
@@ -680,6 +761,11 @@ namespace SupportSystemApp.Repository.Migrations
                 name: "IX_TicketTasks_TaskReminderId",
                 table: "TicketTasks",
                 column: "TaskReminderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketTasks_TaskTypeId",
+                table: "TicketTasks",
+                column: "TaskTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketTasks_TicketId",
@@ -745,6 +831,9 @@ namespace SupportSystemApp.Repository.Migrations
                 name: "TaskReminders");
 
             migrationBuilder.DropTable(
+                name: "TaskTypes");
+
+            migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
@@ -752,6 +841,12 @@ namespace SupportSystemApp.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Sites");
+
+            migrationBuilder.DropTable(
+                name: "TicketPriorities");
+
+            migrationBuilder.DropTable(
+                name: "TicketStatuses");
 
             migrationBuilder.DropTable(
                 name: "SupportGroups");

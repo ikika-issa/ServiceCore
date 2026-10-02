@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SupportSystemApp.Domain.Domain
+namespace SupportSystemApp.Domain.Domain_Models
 {
-    public class TicketPriority : BaseEntity
+    public class SystemsCAB : BaseEntity
     {
         public string Name { get; set; }
     }

@@ -65,7 +65,7 @@
                             @Html.DisplayFor(modelItem => item.Header)
                         </td>
                         <td>
-                            @switch (item.Status)
+                            @* @switch (item.Status)
                             {
                                 case TicketStatus.Open:
                                     <span class="badge bg-primary">Open</span>
@@ -77,10 +77,10 @@
                                 case TicketStatus.Closed:
                                     <span class="badge bg-secondary">Closed</span>
                                     break;
-                            }
+                            } *@
                         </td>
                         <td>
-                            @switch (item.Priority)
+                            @* @switch (item.Priority)
                             {
                                 case TicketPriority.Low:
                                     <span class="badge bg-success">3</span>
@@ -93,7 +93,7 @@
                                 case TicketPriority.High:
                                     <span class="badge bg-danger">1</span>
                                     break;
-                            }
+                            } *@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.CreatedAt)

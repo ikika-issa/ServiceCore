@@ -19,6 +19,40 @@
                 <select asp-for="RequesterId" class ="form-control" asp-items="ViewBag.RequesterId"></select>
             </div>
 
+
+            <div class="form-group">
+                <label asp-for="TicketStatusId" class="control-label"> Status </label>
+                
+                <select asp-for="TicketStatusId" 
+                    class ="form-control" 
+                    asp-items="ViewBag.TicketStatusId">
+                </select>
+
+                <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Priority" class="control-label"> Priority </label>
+                
+                <select asp-for="Priority" 
+                    class ="form-control"
+                    asp-items="ViewBag.Priority">
+                </select>
+
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TechnitianId" class="control-label">Technitian</label>
+
+                <select asp-for="TechnitianId" 
+                    class="form-control" 
+                    asp-items="ViewBag.TechnitianId">
+                </select>
+
+                <span asp-validation-for="TechnitianId" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Header" class="control-label"> Subject </label>
                 <input asp-for="Header" class="form-control" />
@@ -29,23 +63,6 @@
                 <label asp-for="Details" class="control-label"> Description </label>
                 <input asp-for="Details" class="form-control" />
                 <span asp-validation-for="Details" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"> Status </label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Priority" class="control-label"> Priority </label>
-                <input asp-for="Priority" class="form-control" />
-                <span asp-validation-for="Priority" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="TechnitianId" class="control-label"></label>
-                <select asp-for="TechnitianId" class ="form-control" asp-items="ViewBag.TechnitianId"></select>
             </div>
 
             <div class="form-group">

@@ -12,8 +12,8 @@ using SupportSystemApp.Repository;
 namespace SupportSystemApp.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260929191349_m1")]
-    partial class m1
+    [Migration("20261002142702_m5")]
+    partial class m5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -395,6 +395,21 @@ namespace SupportSystemApp.Repository.Migrations
                     b.ToTable("TaskReminders");
                 });
 
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain.TaskType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskTypes");
+                });
+
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.Ticket", b =>
                 {
                     b.Property<Guid>("Id")
@@ -414,8 +429,8 @@ namespace SupportSystemApp.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Priority")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PriorityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RequesterId")
                         .IsRequired()
@@ -424,11 +439,14 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<DateTime?>("ResolvedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("ServiceCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("SiteId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("StatusId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SupportGroupId")
                         .HasColumnType("uniqueidentifier");
@@ -436,20 +454,51 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<string>("TechnitianId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("TicketModeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("TicketNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("TicketTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PriorityId");
 
                     b.HasIndex("RequesterId");
 
+                    b.HasIndex("ServiceCategoryId");
+
                     b.HasIndex("SiteId");
+
+                    b.HasIndex("StatusId");
 
                     b.HasIndex("SupportGroupId");
 
                     b.HasIndex("TechnitianId");
 
+                    b.HasIndex("TicketModeId");
+
+                    b.HasIndex("TicketTypeId");
+
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketPriority", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketPriorities");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketShare", b =>
@@ -478,6 +527,21 @@ namespace SupportSystemApp.Repository.Migrations
                     b.ToTable("TicketShares");
                 });
 
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketStatus", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketStatuses");
+                });
+
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketTask", b =>
                 {
                     b.Property<Guid>("Id")
@@ -493,8 +557,8 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Priority")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PriorityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ScheduleEnd")
                         .HasColumnType("datetime2");
@@ -502,8 +566,8 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<DateTime?>("ScheduleStart")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("StatusId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SupportGroupId")
                         .HasColumnType("uniqueidentifier");
@@ -514,8 +578,8 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<Guid?>("TaskReminderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("TaskType")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TaskTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("TicketId")
                         .HasColumnType("uniqueidentifier");
@@ -525,15 +589,36 @@ namespace SupportSystemApp.Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PriorityId");
+
+                    b.HasIndex("StatusId");
+
                     b.HasIndex("SupportGroupId");
 
                     b.HasIndex("SupportSystemAppUserId");
 
                     b.HasIndex("TaskReminderId");
 
+                    b.HasIndex("TaskTypeId");
+
                     b.HasIndex("TicketId");
 
                     b.ToTable("TicketTasks");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Impact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Impacts");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Permission", b =>
@@ -571,6 +656,81 @@ namespace SupportSystemApp.Repository.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RolePermissions");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Service_Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ServiceCategories");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.SystemsCAB", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SystemsCABs");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.TicketMode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketModes");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.TicketType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketTypes");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Urgency", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Urgencies");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Identity.SupportSystemAppUser", b =>
@@ -792,15 +952,27 @@ namespace SupportSystemApp.Repository.Migrations
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.Ticket", b =>
                 {
+                    b.HasOne("SupportSystemApp.Domain.Domain.TicketPriority", "Priority")
+                        .WithMany()
+                        .HasForeignKey("PriorityId");
+
                     b.HasOne("SupportSystemApp.Domain.Identity.SupportSystemAppUser", "OpenedBy")
                         .WithMany("OpenedTickets")
                         .HasForeignKey("RequesterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("SupportSystemApp.Domain.Domain_Models.Service_Category", "ServiceCategory")
+                        .WithMany()
+                        .HasForeignKey("ServiceCategoryId");
+
                     b.HasOne("SupportSystemApp.Domain.Domain.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId");
+
+                    b.HasOne("SupportSystemApp.Domain.Domain.TicketStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
 
                     b.HasOne("SupportSystemApp.Domain.Domain.SupportGroup", "SupportGroup")
                         .WithMany()
@@ -811,13 +983,31 @@ namespace SupportSystemApp.Repository.Migrations
                         .HasForeignKey("TechnitianId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("SupportSystemApp.Domain.Domain_Models.TicketMode", "TicketMode")
+                        .WithMany()
+                        .HasForeignKey("TicketModeId");
+
+                    b.HasOne("SupportSystemApp.Domain.Domain_Models.TicketType", "TicketType")
+                        .WithMany()
+                        .HasForeignKey("TicketTypeId");
+
                     b.Navigation("AssignedTo");
 
                     b.Navigation("OpenedBy");
 
+                    b.Navigation("Priority");
+
+                    b.Navigation("ServiceCategory");
+
                     b.Navigation("Site");
 
+                    b.Navigation("Status");
+
                     b.Navigation("SupportGroup");
+
+                    b.Navigation("TicketMode");
+
+                    b.Navigation("TicketType");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketShare", b =>
@@ -845,6 +1035,14 @@ namespace SupportSystemApp.Repository.Migrations
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketTask", b =>
                 {
+                    b.HasOne("SupportSystemApp.Domain.Domain.TicketPriority", "Priority")
+                        .WithMany()
+                        .HasForeignKey("PriorityId");
+
+                    b.HasOne("SupportSystemApp.Domain.Domain.TicketStatus", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
                     b.HasOne("SupportSystemApp.Domain.Domain.SupportGroup", "SupportGroup")
                         .WithMany()
                         .HasForeignKey("SupportGroupId");
@@ -857,15 +1055,25 @@ namespace SupportSystemApp.Repository.Migrations
                         .WithMany()
                         .HasForeignKey("TaskReminderId");
 
+                    b.HasOne("SupportSystemApp.Domain.Domain.TaskType", "TaskType")
+                        .WithMany()
+                        .HasForeignKey("TaskTypeId");
+
                     b.HasOne("SupportSystemApp.Domain.Domain.Ticket", null)
                         .WithMany("TicketTasks")
                         .HasForeignKey("TicketId");
+
+                    b.Navigation("Priority");
+
+                    b.Navigation("Status");
 
                     b.Navigation("SupportGroup");
 
                     b.Navigation("SupportSystemAppUser");
 
                     b.Navigation("TaskReminder");
+
+                    b.Navigation("TaskType");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.RolePermission", b =>

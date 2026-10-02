@@ -46,8 +46,19 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    //await SeedData.SeedRoles(services);
+    await SeedData.SeedRoles(services);
     await SeedData.SeedAdmin(services);
+
+    await SeedData.SeedSupportGroups(services);
+    await SeedData.SeedSites(services);
+    await SeedData.SeedSystemsCAB(services);
+    await SeedData.SeedServiceCategory(services);
+    await SeedData.SeedTicketMode(services);
+    await SeedData.SeedTicketPriority(services);
+    await SeedData.SeedTicketStatus(services);
+    await SeedData.SeedTicketType(services);
+    await SeedData.SeedTicketUrgency(services);
+    await SeedData.SeedImpact(services);
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
