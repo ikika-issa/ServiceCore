@@ -16,9 +16,25 @@
 
             <div class="form-group">
                 <label asp-for="RequesterId" class="control-label"></label>
-                <select asp-for="RequesterId" class ="form-control" asp-items="ViewBag.RequesterId"></select>
+
+                <select asp-for="RequesterId" 
+                    class ="form-control" 
+                    asp-items="ViewBag.RequesterId">
+                </select>
+
+                <span asp-validation-for="RequesterId" class="text-danger"></span>
             </div>
 
+            <div class="form-group">
+                <label asp-for="SiteId" class="control-label"></label>
+
+                <select asp-for="SiteId" 
+                    class="form-control" 
+                    asp-items="ViewBag.SiteId">
+                </select>
+
+                <span asp-validation-for="SiteId" class="text-danger"></span>
+            </div>
 
             <div class="form-group">
                 <label asp-for="TicketStatusId" class="control-label"> Status </label>
@@ -43,6 +59,50 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="TicketTypeId" class="control-label"> Request Type </label>
+
+                <select asp-for="TicketTypeId"
+                        class="form-control"
+                        asp-items="ViewBag.TicketTypeId">
+                </select>
+
+                <span asp-validation-for="TicketTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImpactId" class="control-label">Impact</label>
+
+                <select asp-for="ImpactId" 
+                    class ="form-control" 
+                    asp-items="ViewBag.ImpactId">
+                </select>
+
+                <span asp-validation-for="ImpactId" class="text-danger"></span>
+            </div>  
+
+            <div class="form-group">
+                <label asp-for="UrgencyId" class="control-label">Urgency</label>
+
+                <select asp-for="UrgencyId" 
+                    class ="form-control"
+                    asp-items="ViewBag.UrgencyId">
+                </select>
+
+                <span asp-validation-for="UrgencyId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SupportGroupId" class="control-label"> Group </label>
+
+                <select asp-for="SupportGroupId"
+                        class="form-control"
+                        asp-items="ViewBag.SupportGroupId">
+                </select>
+
+                <span asp-validation-for="SupportGroupId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="TechnitianId" class="control-label">Technitian</label>
 
                 <select asp-for="TechnitianId" 
@@ -54,31 +114,84 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"> Category </label>
+
+                <select asp-for="CategoryId"
+                        class="form-control"
+                        asp-items="ViewBag.CategoryId">
+                </select>
+
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SubcategoryId" class="control-label"> Subcategory </label>
+
+                <select asp-for="SubcategoryId"
+                        class="form-control"
+                        asp-items="ViewBag.SubcategoryId">
+                </select>
+
+                <span asp-validation-for="SubcategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryItemId" class="control-label"> Item </label>
+
+                <select asp-for="CategoryItemId"
+                        class="form-control"
+                        asp-items="ViewBag.ItemId">
+                </select>
+
+                <span asp-validation-for="CategoryItemId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TicketMode" class="control-label"> Request Mode </label>
+
+                <select asp-for="TicketModeId"
+                        class="form-control"
+                        asp-items="ViewBag.TicketModeId">
+                </select>
+
+                <span asp-validation-for="TicketModeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Service_CategoryId" class="control-label"> Category </label>
+
+                <select asp-for="Service_CategoryId"
+                        class="form-control"
+                        asp-items="ViewBag.Service_CategoryId">
+                </select>
+
+                <span asp-validation-for="Service_CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Header" class="control-label"> Subject </label>
                 <input asp-for="Header" class="form-control" />
                 <span asp-validation-for="Header" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Details" class="control-label"> Description </label>
-                <input asp-for="Details" class="form-control" />
-                <span asp-validation-for="Details" class="text-danger"></span>
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+
+                <div id="editor" style="height: 250px;"></div>
+
+                <input type="hidden" asp-for="Details" id="detailsInput" />
             </div>
 
-            <div class="form-group">
-                <label asp-for="SiteId" class="control-label"></label>
-                <select asp-for="SiteId" class ="form-control" asp-items="ViewBag.SiteId"></select>
-            </div>
 
             <div class="form-group">
-                <label asp-for="SupportGroupId" class="control-label">Group</label>
-                
-                <select asp-for="SupportGroupId" 
-                    class="form-control" 
-                    asp-items="ViewBag.SupportGroupId">
-                </select>
+                <label asp-for="Resolution" class="control-label"> Resolution </label>
 
-                <span asp-validation-for="SupportGroupId" class="text-danger"></span>
+                <textarea asp-for="Resolution"
+                          class="form-control"
+                          rows="8"
+                          placeholder="Describe the resolution..."></textarea>
+
+                <span asp-validation-for="Resolution" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -92,6 +205,28 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+
+<script>
+    const quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function () {
+        document.getElementById('detailsInput').value =
+            quill.root.innerHTML;
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

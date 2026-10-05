@@ -16,6 +16,7 @@ namespace SupportSystemApp.Domain.Domain
         [Required(ErrorMessage ="Must not be left empty!")]
         public string? Header { get; set; } //SUBJECT
         public string? Details { get; set; } //DESCRIPTION
+        public string? Resolution { get; set; }
         public Guid? TicketStatusId { get; set; }
         public TicketStatus? Status { get; set; }
         public Guid? TicketPriorityId { get; set; }
@@ -27,6 +28,12 @@ namespace SupportSystemApp.Domain.Domain
         [Required(ErrorMessage ="Please choose requester!")]
         public string RequesterId { get; set; } //OPENED BY ID
         public virtual SupportSystemAppUser? OpenedBy { get; set; }
+        public Guid? CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
+        public Guid? SubcategoryId { get; set; }
+        public virtual Subcategory? Subcategory { get; set; }
+        public Guid? CategoryItemId { get; set; }
+        public virtual CategoryItem? CategoryItem { get; set; }
 
         public string? TechnitianId { get; set; }
         public virtual SupportSystemAppUser? AssignedTo { get; set; } //TECHNITIAN
@@ -44,7 +51,8 @@ namespace SupportSystemApp.Domain.Domain
         public virtual Impact? Impact { get; set; }
         public Guid? UrgencyId { get; set; }
         public virtual Urgency? Urgency { get; set; }
-
+        public Guid? Service_CategoryId { get; set; }
+        public virtual Service_Category? Service_Category { get; set; }
 
         public virtual ICollection<TicketTask>? TicketTasks { get; set; }
         public virtual ICollection<Note>? Notes { get; set; }

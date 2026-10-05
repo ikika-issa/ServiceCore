@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupportSystemApp.Repository;
 
@@ -11,9 +12,11 @@ using SupportSystemApp.Repository;
 namespace SupportSystemApp.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261005191411_m7")]
+    partial class m7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,9 +419,6 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -435,20 +435,17 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Property<Guid?>("ImpactId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("RequesterId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Resolution")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResolvedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ServiceCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("Service_CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SiteId")
@@ -485,15 +482,13 @@ namespace SupportSystemApp.Repository.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CategoryItemId");
-
                     b.HasIndex("ImpactId");
+
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("RequesterId");
 
                     b.HasIndex("ServiceCategoryId");
-
-                    b.HasIndex("Service_CategoryId");
 
                     b.HasIndex("SiteId");
 
@@ -649,6 +644,25 @@ namespace SupportSystemApp.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Impacts");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Item", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SubcategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubcategoryId");
+
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Permission", b =>
@@ -986,13 +1000,13 @@ namespace SupportSystemApp.Repository.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("SupportSystemApp.Domain.Domain.CategoryItem", "CategoryItem")
-                        .WithMany()
-                        .HasForeignKey("CategoryItemId");
-
                     b.HasOne("SupportSystemApp.Domain.Domain_Models.Impact", "Impact")
                         .WithMany()
                         .HasForeignKey("ImpactId");
+
+                    b.HasOne("SupportSystemApp.Domain.Domain_Models.Item", "Item")
+                        .WithMany("Tickets")
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("SupportSystemApp.Domain.Identity.SupportSystemAppUser", "OpenedBy")
                         .WithMany("OpenedTickets")
@@ -1003,10 +1017,6 @@ namespace SupportSystemApp.Repository.Migrations
                     b.HasOne("SupportSystemApp.Domain.Domain_Models.Service_Category", "ServiceCategory")
                         .WithMany()
                         .HasForeignKey("ServiceCategoryId");
-
-                    b.HasOne("SupportSystemApp.Domain.Domain_Models.Service_Category", "Service_Category")
-                        .WithMany()
-                        .HasForeignKey("Service_CategoryId");
 
                     b.HasOne("SupportSystemApp.Domain.Domain.Site", "Site")
                         .WithMany()
@@ -1049,17 +1059,15 @@ namespace SupportSystemApp.Repository.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("CategoryItem");
-
                     b.Navigation("Impact");
+
+                    b.Navigation("Item");
 
                     b.Navigation("OpenedBy");
 
                     b.Navigation("Priority");
 
                     b.Navigation("ServiceCategory");
-
-                    b.Navigation("Service_Category");
 
                     b.Navigation("Site");
 
@@ -1142,6 +1150,15 @@ namespace SupportSystemApp.Repository.Migrations
                     b.Navigation("TaskType");
                 });
 
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Item", b =>
+                {
+                    b.HasOne("SupportSystemApp.Domain.Domain.Subcategory", "Subcategory")
+                        .WithMany()
+                        .HasForeignKey("SubcategoryId");
+
+                    b.Navigation("Subcategory");
+                });
+
             modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.RolePermission", b =>
                 {
                     b.HasOne("SupportSystemApp.Domain.Domain_Models.Permission", "Permission")
@@ -1200,6 +1217,11 @@ namespace SupportSystemApp.Repository.Migrations
             modelBuilder.Entity("SupportSystemApp.Domain.Domain.TicketTask", b =>
                 {
                     b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("SupportSystemApp.Domain.Domain_Models.Item", b =>
+                {
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("SupportSystemApp.Domain.Identity.SupportSystemAppUser", b =>

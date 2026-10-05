@@ -39,6 +39,12 @@ builder.Services.AddTransient<ISiteService, SiteService>();
 builder.Services.AddTransient<ICategoryItemService, CategoryItemService>();
 builder.Services.AddTransient<ISupportGroupService, SupportGroupService>();
 builder.Services.AddTransient<IAttachmentService, AttachmentService>();
+builder.Services.AddTransient<ITicketTaskService, TicketTaskService>();
+builder.Services.AddTransient<IPriorityService, PriorityService>();
+builder.Services.AddTransient<IStatusService, StatusService>();
+builder.Services.AddTransient<ITicketModeService, TicketModeService>();
+builder.Services.AddTransient<IService_CategoryService, Service_CategoryService>();
+builder.Services.AddTransient<ITicketTypeService, TicketTypeService>();
 
 var app = builder.Build();
 

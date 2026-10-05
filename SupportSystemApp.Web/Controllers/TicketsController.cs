@@ -18,6 +18,15 @@ namespace SupportSystemApp.Web.Controllers
         private readonly ITicketService _ticketService;
         private readonly ISiteService _siteService;
         private readonly ISupportGroupService _supportGroupService;
+        private readonly ITicketModeService _ticketModeService;
+        private readonly ITicketTypeService _ticketTypeService;
+        private readonly IService_CategoryService _serviceCategoryService;
+        private readonly IPriorityService _priorityService;
+        private readonly IStatusService _statusService;
+        private readonly ICategoryService _categoryService;
+        private readonly ISubcategoryService _subcategoryService;
+        private readonly ICategoryItemService _categoryItemService;
+
         private readonly UserManager<SupportSystemAppUser> _userManager;
 
         public TicketsController(ITicketService ticketService, ISiteService siteService, 
@@ -75,23 +84,9 @@ namespace SupportSystemApp.Web.Controllers
                 })
                 .ToList();
 
-            ViewBag.Priorities = Enum.GetValues(typeof(TicketPriority))
-                .Cast<TicketPriority>()
-                .Select(p => new SelectListItem
-                {
-                    Value = p.ToString(),
-                    Text = p.ToString()
-                })
-                .ToList();
+            ViewBag.Priorities = 
 
-            ViewBag.Statuses = Enum.GetValues(typeof(TicketStatus))
-                .Cast<TicketStatus>()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.ToString(),
-                    Text = s.ToString()
-                })
-                .ToList();
+            ViewBag.Statuses = 
 
             return View();
         }
