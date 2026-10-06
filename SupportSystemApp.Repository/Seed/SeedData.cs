@@ -40,6 +40,16 @@ namespace SupportSystemApp.Repository.Seed
                     {
                         Name = "Toronto",
                         Location = "Canada"
+                    },
+                    new Site
+                    {
+                        Name = "Home Based",
+                        Location = "Home Based"
+                    },
+                    new Site
+                    {
+                        Name = "Not Specified",
+                        Location = "Not Specified"
                     }
                 };
 
@@ -66,6 +76,10 @@ namespace SupportSystemApp.Repository.Seed
                     new Impact
                     {
                         Name = "High"
+                    },
+                    new Impact
+                    {
+                        Name = "Not Specified"
                     }
                 };
                 await context.Impacts.AddRangeAsync(impacts);
@@ -81,6 +95,10 @@ namespace SupportSystemApp.Repository.Seed
             {
                 var supportGroups = new List<SupportGroup>
                 {
+                    new SupportGroup
+                    {
+                        Name = "Not Specified"
+                    },
                     new SupportGroup
                     {
                         Name = "Internal support"
@@ -133,6 +151,23 @@ namespace SupportSystemApp.Repository.Seed
             }
         }
 
+        public static async Task SeedCategories(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            if (!context.Categories.Any())
+            {
+                var categories = new List<Category>
+                {
+                    new Category
+                    {
+                        Name = "Not specified"
+                    }
+                };
+                await context.Categories.AddRangeAsync(categories);
+                await context.SaveChangesAsync();
+            }
+        }
+
         public static async Task SeedTicketType(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
@@ -141,6 +176,10 @@ namespace SupportSystemApp.Repository.Seed
             {
                 var types = new List<TicketType>
                 {
+                    new TicketType
+                    {
+                        Name = "Not Specified"
+                    },
                     new TicketType
                     {
                         Name = "Automated Request"
@@ -225,6 +264,10 @@ namespace SupportSystemApp.Repository.Seed
                 {
                     new TicketPriority
                     {
+                        Name = "Not Specified"
+                    },
+                    new TicketPriority
+                    {
                         Name = "Low"
                     },
                     new TicketPriority
@@ -250,6 +293,10 @@ namespace SupportSystemApp.Repository.Seed
             {
                 var modes = new List<TicketMode>
                 {
+                    new TicketMode
+                    {
+                        Name = "Not Specified"
+                    },
                     new TicketMode
                     {
                         Name = "Chat"
@@ -313,6 +360,10 @@ namespace SupportSystemApp.Repository.Seed
                 {
                     new Urgency
                     {
+                        Name = "Not Specified"
+                    },
+                    new Urgency
+                    {
                         Name = "Low"
                     },
                     new Urgency
@@ -324,6 +375,7 @@ namespace SupportSystemApp.Repository.Seed
                         Name = "High"
                     }
                 };
+
                 await context.Urgencies.AddRangeAsync(urgencies);
                 await context.SaveChangesAsync();
             }
@@ -337,6 +389,10 @@ namespace SupportSystemApp.Repository.Seed
             {
                 var serviceCategories = new List<Service_Category>
                 {
+                    new Service_Category
+                    {
+                        Name = "Not Specified"
+                    },
                     new Service_Category
                     {
                         Name = "Hardware"
@@ -356,10 +412,6 @@ namespace SupportSystemApp.Repository.Seed
                     new Service_Category
                     {
                         Name = "Application Support"
-                    },
-                    new Service_Category
-                    {
-                        Name = "Not Specified"
                     }
                 };
                 await context.ServiceCategories.AddRangeAsync(serviceCategories);

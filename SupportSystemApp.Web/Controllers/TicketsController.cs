@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AspNetCoreGeneratedDocument;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using SupportSystemApp.Domain.Domain;
 using SupportSystemApp.Domain.Identity;
 using SupportSystemApp.Repository;
+using SupportSystemApp.Service.Implementation;
 using SupportSystemApp.Service.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SupportSystemApp.Web.Controllers
 {
@@ -26,25 +29,168 @@ namespace SupportSystemApp.Web.Controllers
         private readonly ICategoryService _categoryService;
         private readonly ISubcategoryService _subcategoryService;
         private readonly ICategoryItemService _categoryItemService;
+        private readonly IImpactService _impactService;
+        private readonly IUrgencyService _urgencyService;
 
         private readonly UserManager<SupportSystemAppUser> _userManager;
 
         public TicketsController(ITicketService ticketService, ISiteService siteService, 
-            ISupportGroupService supportGroupService, UserManager<SupportSystemAppUser> userManager)
+            ISupportGroupService supportGroupService,
+            ITicketModeService ticketModeService,
+            ITicketTypeService ticketTypeService,
+            IService_CategoryService serviceCategoryService,
+            UserManager<SupportSystemAppUser> userManager,
+            IPriorityService priorityService, IStatusService statusService,
+            ICategoryItemService categoryItemService,
+            ISubcategoryService subcategoryService,
+            ICategoryService categoryService,
+            IImpactService impactService,
+            IUrgencyService urgencyService)
         {
             _ticketService = ticketService;
             _siteService = siteService;
             _supportGroupService = supportGroupService;
+            _ticketModeService = ticketModeService;
+            _ticketTypeService = ticketTypeService;
+            _serviceCategoryService = serviceCategoryService;
             _userManager = userManager;
+            _priorityService = priorityService;
+            _statusService = statusService;
+            _categoryItemService = categoryItemService;
+            _subcategoryService = subcategoryService;
+            _categoryService = categoryService;
+            _impactService = impactService;
+            _urgencyService = urgencyService;
         }
 
-        // GET: Tickets
+
+        private void PopulateDropdowns(Guid? categoryId = null, Guid? subcategoryId = null)
+        {
+            ViewBag.Categories = _categoryService.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToList();
+
+            ViewBag.Subcategories = categoryId.HasValue
+                ? _subcategoryService.GetAllByCategoryId(categoryId.Value)
+                    .Select(s => new SelectListItem
+                    {
+                        Value = s.Id.ToString(),
+                        Text = s.Name
+                    })
+                    .ToList()
+                : new List<SelectListItem>();
+
+            ViewBag.Items = subcategoryId.HasValue
+              ? _categoryItemService.GetCategoryItemsBySubcategoryID(subcategoryId.Value)
+                  .Select(i => new SelectListItem
+                  {
+                      Value = i.Id.ToString(),
+                      Text = i.Name
+                  })
+                  .ToList()
+              : new List<SelectListItem>();
+
+
+            //THE REST OF THE DROPDOWNS
+
+            ViewBag.Sites = _siteService.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToList();
+
+            ViewBag.SupportGroups = _supportGroupService.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToList();
+
+            ViewBag.Users = _userManager.Users
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id.ToString(),
+                    Text = u.UserName
+                })
+                .ToList();
+
+            ViewBag.Priorities = _priorityService.GetAll()
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id.ToString(),
+                    Text = p.Name
+                })
+                .ToList();
+
+            ViewBag.Statuses = _statusService.GetAll()
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name
+                })
+                .ToList();
+
+            ViewBag.Sites = _siteService.GetAll()
+                .Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Name
+                })
+                .ToList();
+
+            ViewBag.TicketModes = _ticketModeService.GetAll()
+                .Select(tm => new SelectListItem
+                {
+                    Value = tm.Id.ToString(),
+                    Text = tm.Name
+                })
+                .ToList();
+
+            ViewBag.TicketTypes = _ticketTypeService.GetAll()
+                .Select(tt => new SelectListItem
+                {
+                    Value = tt.Id.ToString(),
+                    Text = tt.Name
+                })
+                .ToList();
+
+            ViewBag.ServiceCategories = _serviceCategoryService.GetAll()
+                .Select(sc => new SelectListItem
+                {
+                    Value = sc.Id.ToString(),
+                    Text = sc.Name
+                })
+                .ToList();
+
+            ViewBag.Impacts = _impactService.GetAll()
+                .Select(sc => new SelectListItem
+                {
+                    Value = sc.Id.ToString(),
+                    Text = sc.Name
+                }
+                ).ToList();
+
+            ViewBag.Urgencies = _urgencyService.GetAll()
+                .Select(sc => new SelectListItem
+                {
+                    Value = sc.Id.ToString(),
+                    Text = sc.Name
+                }
+                ).ToList();
+        }
+
         public IActionResult Index()
         {
             return View(_ticketService.GetAll());
         }
 
-        // GET: Tickets/Details/5
         public IActionResult Details(Guid id)
         {
             var ticket = _ticketService.GetById(id);
@@ -57,45 +203,15 @@ namespace SupportSystemApp.Web.Controllers
             return View(ticket);
         }
 
-        // GET: Tickets/Create
+
         public IActionResult Create()
         {
-            ViewBag.Sites = _siteService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
-
-            ViewBag.SupportGroups = _supportGroupService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
-
-            ViewBag.Users = _userManager.Users
-                .Select(u => new SelectListItem
-                {
-                    Value = u.Id.ToString(),
-                    Text = u.UserName
-                })
-                .ToList();
-
-            ViewBag.Priorities = 
-
-            ViewBag.Statuses = 
+            PopulateDropdowns();
 
             return View();
         }
 
-        // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("TicketNumber,Header,Details,Status,Priority,CreatedAt,DueBy,ResolvedAt,RequesterId,TechnitianId,SiteId,SupportGroupId,Id")] Ticket ticket)
         {
             if (ModelState.IsValid)
@@ -104,53 +220,11 @@ namespace SupportSystemApp.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-
-            ViewBag.Sites = _siteService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
-
-            ViewBag.SupportGroups = _supportGroupService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
-
-            ViewBag.Users = _userManager.Users
-                .Select(u => new SelectListItem
-                {
-                    Value = u.Id.ToString(),
-                    Text = u.UserName
-                })
-                .ToList();
-
-            ViewBag.Priorities = Enum.GetValues(typeof(TicketPriority))
-                .Cast<TicketPriority>()
-                .Select(p => new SelectListItem
-                {
-                    Value = p.ToString(),
-                    Text = p.ToString()
-                })
-                .ToList();
-
-            ViewBag.Statuses = Enum.GetValues(typeof(TicketStatus))
-                .Cast<TicketStatus>()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.ToString(),
-                    Text = s.ToString()
-                })
-                .ToList();
-
+            PopulateDropdowns(ticket.CategoryId, ticket.SubcategoryId);
             return View(ticket);
         }
 
-        // GET: Tickets/Edit/5
+
         public IActionResult Edit(Guid id)
         {
             var ticket = _ticketService.GetById(id);
@@ -160,54 +234,11 @@ namespace SupportSystemApp.Web.Controllers
                 return NotFound();
             }
 
-            ViewBag.Sites = _siteService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
-
-            ViewBag.SupportGroups = _supportGroupService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
-
-            ViewBag.Users = _userManager.Users
-                .Select(u => new SelectListItem
-                {
-                    Value = u.Id.ToString(),
-                    Text = u.UserName
-                })
-                .ToList();
-
-            ViewBag.Priorities = Enum.GetValues(typeof(TicketPriority))
-                .Cast<TicketPriority>()
-                .Select(p => new SelectListItem
-                {
-                    Value = p.ToString(),
-                    Text = p.ToString()
-                })
-                .ToList();
-
-            ViewBag.Statuses = Enum.GetValues(typeof(TicketStatus))
-                .Cast<TicketStatus>()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.ToString(),
-                    Text = s.ToString()
-                })
-                .ToList();
-
-            return View(ticket);
+            PopulateDropdowns();
+            return View();
         }
 
-        // POST: Tickets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Guid id, [Bind("TicketNumber,Header,Details,Status,Priority,CreatedAt,DueBy,ResolvedAt,RequesterId,TechnitianId,SiteId,SupportGroupId,Id")] Ticket ticket)
@@ -236,51 +267,13 @@ namespace SupportSystemApp.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Sites = _siteService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
 
-            ViewBag.SupportGroups = _supportGroupService.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList();
+            PopulateDropdowns(ticket.CategoryId, ticket.SubcategoryId);
 
-            ViewBag.Users = _userManager.Users
-                .Select(u => new SelectListItem
-                {
-                    Value = u.Id.ToString(),
-                    Text = u.UserName
-                })
-                .ToList();
-
-            ViewBag.Priorities = Enum.GetValues(typeof(TicketPriority))
-                .Cast<TicketPriority>()
-                .Select(p => new SelectListItem
-                {
-                    Value = p.ToString(),
-                    Text = p.ToString()
-                })
-                .ToList();
-
-            ViewBag.Statuses = Enum.GetValues(typeof(TicketStatus))
-                .Cast<TicketStatus>()
-                .Select(s => new SelectListItem
-                {
-                    Value = s.ToString(),
-                    Text = s.ToString()
-                })
-                .ToList();
             return View(ticket);
         }
 
-        // GET: Tickets/Delete/5
+
         public IActionResult Delete(Guid id)
         {
             var ticket = _ticketService.GetById(id);
@@ -293,7 +286,7 @@ namespace SupportSystemApp.Web.Controllers
             return View(ticket);
         }
 
-        // POST: Tickets/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)

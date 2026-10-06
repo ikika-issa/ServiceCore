@@ -45,6 +45,9 @@ builder.Services.AddTransient<IStatusService, StatusService>();
 builder.Services.AddTransient<ITicketModeService, TicketModeService>();
 builder.Services.AddTransient<IService_CategoryService, Service_CategoryService>();
 builder.Services.AddTransient<ITicketTypeService, TicketTypeService>();
+builder.Services.AddTransient<IImpactService, ImpactService>();
+builder.Services.AddTransient<IUrgencyService, UrgencyService>();
+
 
 var app = builder.Build();
 
@@ -65,6 +68,7 @@ using (var scope = app.Services.CreateScope())
     await SeedData.SeedTicketType(services);
     await SeedData.SeedTicketUrgency(services);
     await SeedData.SeedImpact(services);
+    await SeedData.SeedCategories(services);
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

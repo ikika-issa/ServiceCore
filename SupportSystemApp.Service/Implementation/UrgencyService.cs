@@ -19,27 +19,36 @@ namespace SupportSystemApp.Service.Implementation
 
         public Urgency DeleteById(Guid id)
         {
-            throw new NotImplementedException();
+            var urgency = GetById(id);
+
+            if(urgency == null)
+            {
+                throw new Exception("Urgency not found");
+            }
+            
+            _urgencyRepository.Delete(urgency);
+            return urgency;
         }
 
         public List<Urgency> GetAll()
         {
-            throw new NotImplementedException();
+            return _urgencyRepository.GetAll(selector: x => x).ToList();
         }
 
         public Urgency GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return _urgencyRepository.Get(selector: x => x, predicate: x => x.Id == id)!;
         }
 
         public Urgency Insert(Urgency urgency)
         {
-            throw new NotImplementedException();
+            urgency.Id = Guid.NewGuid();
+            return _urgencyRepository.Insert(urgency);
         }
 
         public Urgency Update(Urgency urgency)
         {
-            throw new NotImplementedException();
+            return _urgencyRepository.Update(urgency);
         }
     }
 }
