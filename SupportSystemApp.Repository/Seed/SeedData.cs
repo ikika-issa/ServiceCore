@@ -23,6 +23,11 @@ namespace SupportSystemApp.Repository.Seed
                 {
                     new Site
                     {
+                        Name = "Not Specified",
+                        Location = "Not Specified"
+                    },
+                    new Site
+                    {
                         Name = "Skopje",
                         Location = "Macedonia"
                     },
@@ -45,11 +50,6 @@ namespace SupportSystemApp.Repository.Seed
                     {
                         Name = "Home Based",
                         Location = "Home Based"
-                    },
-                    new Site
-                    {
-                        Name = "Not Specified",
-                        Location = "Not Specified"
                     }
                 };
 
@@ -67,6 +67,10 @@ namespace SupportSystemApp.Repository.Seed
                 {
                     new Impact
                     {
+                        Name = "Not Specified"
+                    },
+                    new Impact
+                    {
                         Name = "Low"
                     },
                     new Impact
@@ -76,10 +80,6 @@ namespace SupportSystemApp.Repository.Seed
                     new Impact
                     {
                         Name = "High"
-                    },
-                    new Impact
-                    {
-                        Name = "Not Specified"
                     }
                 };
                 await context.Impacts.AddRangeAsync(impacts);
@@ -202,7 +202,7 @@ namespace SupportSystemApp.Repository.Seed
                     }
                 };
 
-                await context.TicketTypes.AddRangeAsync();
+                await context.TicketTypes.AddRangeAsync(types);
                 await context.SaveChangesAsync();
             }
         }
