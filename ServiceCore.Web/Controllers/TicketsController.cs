@@ -1,4 +1,5 @@
 ﻿using AspNetCoreGeneratedDocument;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using SupportSystemApp.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace SupportSystemApp.Web.Controllers
@@ -204,6 +206,8 @@ namespace SupportSystemApp.Web.Controllers
 
         public IActionResult Index()
         {
+            PopulateDropdowns();
+
             return View(_ticketService.GetAll());
         }
 
@@ -257,7 +261,8 @@ namespace SupportSystemApp.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, [Bind("TicketNumber,Header,Details,Status,Priority,CreatedAt,DueBy,ResolvedAt,RequesterId,TechnitianId,SiteId,SupportGroupId,Id")] Ticket ticket)
+        public IActionResult Edit(Guid id, [Bind("TicketNumber,Header,Details,Status,Priority,CreatedAt,DueBy,ResolvedAt,RequesterId,TechnitianId,SiteId,SupportGroupId,Id")]
+            Ticket ticket, List<IFormFile> attachments)
         {
             if (id != ticket.Id)
             {
@@ -269,7 +274,32 @@ namespace SupportSystemApp.Web.Controllers
                 try
                 {
                     _ticketService.Update(ticket);
-                }
+
+                    if (attachments != null && attachments.Any())
+                    {
+                        foreach (var file in attachments)
+                        {
+                            if (file.Length > 0)
+                            {
+                                // max 25 MB
+                                if (file.Length > 25 * 1024 * 1024)
+                                {
+                                    ModelState.AddModelError(
+                                        "attachments",
+                                        "Maximum file size is 25 MB.");
+
+                                    PopulateDropdowns(
+                                        ticket.CategoryId,
+                                        ticket.SubcategoryId);
+
+                                    return View(ticket);
+                                }
+
+                                // tuka ke go zacuvame attachmentot
+                            }
+                        }
+                    }
+                    }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!TicketExists(ticket.Id))

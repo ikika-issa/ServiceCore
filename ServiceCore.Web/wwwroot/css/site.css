@@ -20,3 +20,40 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.ticket-table {
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto;
+}
+
+    .ticket-table th,
+    .ticket-table td {
+        white-space: nowrap;
+        width: 1%;
+    }
+
+    .ticket-table .form-select {
+        width: auto;
+        min-width: 120px;
+    }
+
+.ticket-open td {
+    background-color: #ff0000;
+}
+
+.ticket-progress td {
+    background-color: #fff3cd;
+}
+
+.ticket-hold td {
+    background-color: #e2e3e5;
+}
+
+.ticket-resolved td {
+    background-color: #d1e7dd;
+}
+
+.ticket-closed td {
+    background-color: #d3d3d3;
+}

@@ -83,6 +83,62 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.SupportGroup!.Id)
         </dd>
+
+        <div class="card shadow-sm mt-3">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Attachments</h5>
+            </div>
+
+            <div class="card-body">
+
+                @if (Model.Attachments != null && Model.Attachments.Any())
+                {
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Size</th>
+                                <th>Uploaded</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var attachment in Model.Attachments)
+                            {
+                                <tr>
+                                    <td>
+                                        📎 @attachment.FileName
+                                    </td>
+
+                                    <td>
+                                        @(Math.Round(attachment.FileSize / 1024.0 / 1024.0, 2)) MB
+                                    </td>
+
+                                    <td>
+                                        @attachment.UploadedAt.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+
+                                    <td>
+                                        <a asp-controller="Attachments"
+                                           asp-action="Download"
+                                           asp-route-id="@attachment.Id"
+                                           class="btn btn-sm btn-outline-primary">
+                                            Download
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <span class="text-muted">No attachments</span>
+                }
+
+            </div>
+        </div>
     </dl>
 </div>
 <div>

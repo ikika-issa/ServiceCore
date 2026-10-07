@@ -69,23 +69,12 @@ namespace SupportSystemApp.Service.Implementation
         {
             var lastTicket = _ticketRepository
                 .GetAll(selector: x => x)
-                .OrderByDescending(x => x.CreatedAt)
+                .OrderByDescending(x => x.TicketNumber)
                 .FirstOrDefault();
 
-            int nextNumber = 1;
-
-            if (lastTicket != null && !string.IsNullOrEmpty(lastTicket.TicketNumber))
-            {
-                // Ako brojot e primer "TKT-000123"
-                string numericPart = lastTicket.TicketNumber.Replace("TKT-", "");
-
-                if (int.TryParse(numericPart, out int lastNumber))
-                {
-                    nextNumber = lastNumber + 1;
-                }
-            }
-
-            return $"TKT-{nextNumber:D6}";
+            return lastTicket == null
+                ? "1"
+                : (int.Parse(lastTicket.TicketNumber) + 1).ToString();
         }
 
         public Ticket Update(Ticket ticket)

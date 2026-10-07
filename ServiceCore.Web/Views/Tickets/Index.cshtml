@@ -6,94 +6,234 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="card shadow-sm">
-    <div class="card-header bg-dark text-white">
-        <h4 class="mb-0">Requests   <a asp-action="Create">+New</a></h4>
+<div class="cardkako shadow-sm">
+    <div class="card-header bg-dark text-white d-flex align-items-center">
+        <h4 class="mb-0">Requests</h4>
+
+        <a asp-action="Create" class="btn btn-light btn-sm">
+            + New
+        </a>
     </div>
+
     <div class="card-body">
-        <table class="table table-bordered table-hover table-striped align-middle">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>
-                        ID
-                    </th>
-                    <th>
-                        SUBJECT
-                    </th>
-                    <th>
-                        STATUS
-                    </th>
-                    <th>
-                        PRIORITY
-                    </th>
-                    <th>
-                        CREATED DATE
-                    </th>
-                    <th>
-                        DUE BY
-                    </th>
-                    <th>
-                        RESOLVED AT
-                    </th>
-                    <th>
-                        REQUESTER
-                    </th>
-                    <th>
-                        ASSIGNED TO
-                    </th>
-                    <th>
-                        SITE
-                    </th>
-                    <th>
-                        GROUP
-                    </th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
 
-            <tbody>
-                @foreach (var item in Model)
-                {
+            <table class="table table-bordered table-hover table-striped align-middle ticket-table">
+                <thead>
                     <tr>
-                        <td>
-
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TicketNumber)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Header)
-                        </td>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CreatedAt)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DueBy)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ResolvedAt)
-                        </td>
-                        <td>
-                            @(item.OpenedBy?.UserName ?? "-")
-                        </td>
-                        <td>
-                            @(item.AssignedTo?.UserName ?? "Unassigned")
-                        </td>
-                        <td>
-                            @(item.Site?.Name ?? "-")
-                        </td>
-                        <td>
-                            @* @(item.SupportGroup.Name ? "Not Specified" : "-")) *@
-                        </td>
+                        <th></th>
+                        <th>ID</th>
+                        <th>SUBJECT</th>
+                        <th>STATUS</th>
+                        <th>PRIORITY</th>
+                        <th>CREATED DATE</th>
+                        <th>DUE BY</th>
+                        <th>RESOLVED AT</th>
+                        <th>REQUESTER</th>
+                        <th>ASSIGNED TO</th>
+                        <th>SITE</th>
+                        <th>GROUP</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var rowClass = item.Status?.Name switch
+                        {
+                            "Open" => "ticket-open",
+                            "In Progress" => "ticket-progress",
+                            "On Hold" => "ticket-hold",
+                            "Resolved" => "ticket-resolved",
+                            "Closed" => "ticket-closed",
+                            _ => ""
+                        };
+
+                        <tr class="@rowClass">
+
+                            <td>
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-dark">
+                                    View
+                                </a>
+                            </td>
+
+                            <td>
+                                @item.TicketNumber
+                            </td>
+
+                            <td>
+                                @item.Header
+                            </td>
+
+                            <td>
+                                <select class="form-select"
+                                        onchange="updateTicket('@item.Id', 'StatusId', this.value)">
+
+                                    @foreach (var status in ViewBag.Statuses)
+                                    {
+                                        <option value="@status.Value"
+                                                selected="@(status.Value == item.TicketStatusId?.ToString())">
+                                            @status.Text
+                                        </option>
+                                    }
+
+                                </select>
+                            </td>
+
+                            <td>
+                                <select class="form-select"
+                                        onchange="updateTicket('@item.Id', 'PriorityId', this.value)">
+
+                                    @foreach (var priority in ViewBag.Priorities)
+                                    {
+                                        <option value="@priority.Value"
+                                                selected="@(priority.Value == item.TicketPriorityId?.ToString())">
+                                            @priority.Text
+                                        </option>
+                                    }
+
+                                </select>
+                            </td>
+
+                            <td>
+                                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+                                @(item.DueBy?.ToString("dd/MM/yyyy HH:mm") ?? "-")
+                            </td>
+
+                            <td>
+                                @(item.ResolvedAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")
+                            </td>
+
+                            <td>
+                                @(item.OpenedBy?.UserName ?? "-")
+                            </td>
+
+                            <!-- ASSIGNED TO -->
+                            <td>
+                                <select class="form-select"
+                                        onchange="updateTicket('@item.Id', 'TechnitianId', this.value)">
+
+                                    <option value="">Unassigned</option>
+
+                                    @foreach (var technician in ViewBag.Users)
+                                    {
+                                        <option value="@technician.Value"
+                                                selected="@(technician.Value == item.TechnitianId)">
+                                            @technician.Text
+                                        </option>
+                                    }
+
+                                </select>
+                            </td>
+
+                            <!-- SITE -->
+                            <td>
+                                <select class="form-select"
+                                        onchange="updateTicket('@item.Id', 'SiteId', this.value)">
+
+                                    @foreach (var site in ViewBag.Sites)
+                                    {
+                                        <option value="@site.Value"
+                                                selected="@(site.Value == item.SiteId?.ToString())">
+                                            @site.Text
+                                        </option>
+                                    }
+
+                                </select>
+                            </td>
+
+                            <!-- GROUP -->
+                            <td>
+                                <select class="form-select"
+                                        onchange="updateTicket('@item.Id', 'SupportGroupId', this.value)">
+
+                                    @foreach (var group in ViewBag.SupportGroups)
+                                    {
+                                        <option value="@group.Value"
+                                                selected="@(group.Value == item.SupportGroupId?.ToString())">
+                                            @group.Text
+                                        </option>
+                                    }
+
+                                </select>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+                async function updateTicket(ticketId, field, value, selectElement) {
+
+            const response = await fetch('/Tickets/UpdateField', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ticketId: ticketId,
+                    field: field,
+                    value: value
+                })
+            });
+
+            if (!response.ok) {
+                alert("Failed to update ticket.");
+                return;
+            }
+
+            if (field === "StatusId") {
+
+                const row = selectElement.closest("tr");
+
+                row.classList.remove(
+                    "ticket-open",
+                    "ticket-progress",
+                    "ticket-hold",
+                    "ticket-resolved",
+                    "ticket-closed"
+                );
+
+                const statusName =
+                    selectElement.options[selectElement.selectedIndex].text;
+
+                switch (statusName) {
+
+                    case "Open":
+                        row.classList.add("ticket-open");
+                        break;
+
+                    case "In Progress":
+                        row.classList.add("ticket-progress");
+                        break;
+
+                    case "On Hold":
+                        row.classList.add("ticket-hold");
+                        break;
+
+                    case "Resolved":
+                        row.classList.add("ticket-resolved");
+                        break;
+
+                    case "Closed":
+                        row.classList.add("ticket-closed");
+                        break;
+                }
+            }
+        }
+    </script>
+}
+
+  
