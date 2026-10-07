@@ -1,0 +1,235 @@
+﻿@model SupportSystemApp.Domain.Domain.Ticket
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Ticket</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="RequesterId" class="control-label"></label>
+
+                <select asp-for="RequesterId" 
+                    class ="form-control" 
+                    asp-items="ViewBag.Users">
+                </select>
+
+                <span asp-validation-for="RequesterId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SiteId" class="control-label">Site</label>
+
+                <select asp-for="SiteId"
+                        class="form-control"
+                        asp-items="ViewBag.Sites">
+                </select>
+
+                <span asp-validation-for="SiteId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TicketStatusId" class="control-label"> Status </label>
+                
+                <select asp-for="TicketStatusId"
+                        class="form-control"
+                        asp-items="ViewBag.Statuses">
+                </select>
+
+                <span asp-validation-for="TicketStatusId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TicketPriorityId" class="control-label"> Priority </label>
+                
+                <select asp-for="TicketPriorityId"
+                    class="form-control"
+                    asp-items="ViewBag.Priorities">
+                </select>
+
+                <span asp-validation-for="TicketPriorityId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TicketTypeId" class="control-label"> Request Type </label>
+
+                <select asp-for="TicketTypeId"
+                        class="form-control"
+                        asp-items="ViewBag.TicketTypes">
+                </select>
+
+                <span asp-validation-for="TicketTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImpactId" class="control-label">Impact</label>
+
+                <select asp-for="ImpactId" 
+                    class ="form-control" 
+                    asp-items="ViewBag.Impacts">
+                </select>
+
+                <span asp-validation-for="ImpactId" class="text-danger"></span>
+            </div>  
+
+            <div class="form-group">
+                <label asp-for="UrgencyId" class="control-label">Urgency</label>
+
+                <select asp-for="UrgencyId" 
+                    class ="form-control"
+                    asp-items="ViewBag.Urgencies">
+                </select>
+
+                <span asp-validation-for="UrgencyId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SupportGroupId" class="control-label"> Group </label>
+
+                <select asp-for="SupportGroupId"
+                        class="form-control"
+                        asp-items="ViewBag.SupportGroups">
+                </select>
+
+                <span asp-validation-for="SupportGroupId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TechnitianId" class="control-label">Technitian</label>
+
+                <select asp-for="TechnitianId" 
+                    class="form-control" 
+                    asp-items="ViewBag.Users">
+                </select>
+
+                <span asp-validation-for="TechnitianId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"> Category </label>
+
+                <select asp-for="CategoryId"
+                        class="form-control"
+                        asp-items="ViewBag.Categories">
+                </select>
+
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SubcategoryId" class="control-label"> Subcategory </label>
+
+                <select asp-for="SubcategoryId"
+                        class="form-control"
+                        asp-items="ViewBag.Subcategories">
+                </select>
+
+                <span asp-validation-for="SubcategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryItemId" class="control-label"> Item </label>
+
+                <select asp-for="CategoryItemId"
+                        class="form-control"
+                        asp-items="ViewBag.Items">
+                </select>
+
+                <span asp-validation-for="CategoryItemId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TicketMode" class="control-label"> Request Mode </label>
+
+                <select asp-for="TicketModeId"
+                        class="form-control"
+                        asp-items="ViewBag.TicketModes">
+                </select>
+
+                <span asp-validation-for="TicketModeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Service_CategoryId" class="control-label"> Service Category </label>
+
+                <select asp-for="Service_CategoryId"
+                        class="form-control"
+                        asp-items="ViewBag.ServiceCategories">
+                </select>
+
+                <span asp-validation-for="Service_CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Header" class="control-label"> Subject </label>
+
+                <input asp-for="Header" class="form-control" />
+
+                <span asp-validation-for="Header" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+
+                <div id="editor" style="height: 250px;"></div>
+
+                <input type="hidden" asp-for="Details" id="detailsInput" />
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Resolution" class="control-label"> Resolution </label>
+
+                <textarea asp-for="Resolution"
+                          class="form-control"
+                          rows="8"
+                          placeholder="Describe the resolution..."></textarea>
+
+                <span asp-validation-for="Resolution" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+
+<script>
+    const quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+            ]
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function () {
+        document.getElementById('detailsInput').value =
+            quill.root.innerHTML;
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

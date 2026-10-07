@@ -1,0 +1,99 @@
+﻿@using SupportSystemApp.Domain.Domain
+@model IEnumerable<SupportSystemApp.Domain.Domain.Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">Requests   <a asp-action="Create">+New</a></h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-hover table-striped align-middle">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        SUBJECT
+                    </th>
+                    <th>
+                        STATUS
+                    </th>
+                    <th>
+                        PRIORITY
+                    </th>
+                    <th>
+                        CREATED DATE
+                    </th>
+                    <th>
+                        DUE BY
+                    </th>
+                    <th>
+                        RESOLVED AT
+                    </th>
+                    <th>
+                        REQUESTER
+                    </th>
+                    <th>
+                        ASSIGNED TO
+                    </th>
+                    <th>
+                        SITE
+                    </th>
+                    <th>
+                        GROUP
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TicketNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Header)
+                        </td>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DueBy)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ResolvedAt)
+                        </td>
+                        <td>
+                            @(item.OpenedBy?.UserName ?? "-")
+                        </td>
+                        <td>
+                            @(item.AssignedTo?.UserName ?? "Unassigned")
+                        </td>
+                        <td>
+                            @(item.Site?.Name ?? "-")
+                        </td>
+                        <td>
+                            @* @(item.SupportGroup.Name ? "Not Specified" : "-")) *@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
